@@ -1,0 +1,51 @@
+/** Shared light/dark tokens — match home (`HOME_THEME`) for consistency. */
+export const APP_THEME = {
+  light: {
+    bg: "#F3F4F6",
+    bgAlt: "#F8F9FA",
+    surface: "#FFFFFF",
+    surfaceAlt: "#F3F4F6",
+    text: "#111827",
+    textDim: "#6B7280",
+    textMuted: "#9CA3AF",
+    border: "#E5E7EB",
+    borderSubtle: "#F3F4F6",
+    inputBg: "#F3F4F6",
+    inputBorder: "#D1D5DB",
+    iconMuted: "#9CA3AF",
+    refresh: "#000000",
+    overlay: "rgba(0,0,0,0.5)",
+    dangerBg: "#FEF2F2",
+    dangerText: "#EF4444",
+    segmentBg: "#F3F4F6",
+    segmentActive: "#FFFFFF",
+    segmentActiveText: "#111827",
+    statusBar: "dark-content",
+  },
+  dark: {
+    bg: "#0A0A0C",
+    bgAlt: "#0A0A0C",
+    surface: "#16161A",
+    surfaceAlt: "#1E1E24",
+    text: "#F5F5F7",
+    textDim: "#A1A1AA",
+    textMuted: "#71717A",
+    border: "#2A2A2E",
+    borderSubtle: "#27272A",
+    inputBg: "#1E1E24",
+    inputBorder: "#2A2A2E",
+    iconMuted: "#A1A1AA",
+    refresh: "#9AEA62",
+    overlay: "rgba(0,0,0,0.65)",
+    dangerBg: "rgba(239,68,68,0.14)",
+    dangerText: "#F87171",
+    segmentBg: "#1E1E24",
+    segmentActive: "#2A2A2E",
+    segmentActiveText: "#F5F5F7",
+    statusBar: "light-content",
+  },
+};
+
+export function getAppTheme(isDark) {
+  return isDark ? APP_THEME.dark : APP_THEME.light;
+}

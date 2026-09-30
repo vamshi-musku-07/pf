@@ -1,0 +1,2 @@
+# EAS Build archive rules live at the monorepo git root: ../../.easignore (C:\pff\.easignore)
+# This file is only used when EAS_NO_VCS=1 is set. See root .easignore for cloud builds.

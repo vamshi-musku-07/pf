@@ -1,0 +1,89 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@import "nativewind/theme";
+
+@theme {
+  /* Manrope = default body / UI */
+  --font-sans: Manrope_400Regular;
+  --font-manrope: Manrope_400Regular;
+  --font-manrope-medium: Manrope_500Medium;
+  --font-manrope-semibold: Manrope_600SemiBold;
+  --font-manrope-bold: Manrope_700Bold;
+  --font-manrope-extrabold: Manrope_800ExtraBold;
+
+  /* Plus Jakarta Sans = display / headings */
+  --font-display: PlusJakartaSans_700Bold;
+  --font-jakarta: PlusJakartaSans_400Regular;
+  --font-jakarta-medium: PlusJakartaSans_500Medium;
+  --font-jakarta-semibold: PlusJakartaSans_600SemiBold;
+  --font-jakarta-bold: PlusJakartaSans_700Bold;
+  --font-jakarta-extrabold: PlusJakartaSans_800ExtraBold;
+}
+
+/* NativeWind defaults to System — force Manrope on each platform */
+:root {
+  @media ios {
+    --font-sans: Manrope_400Regular;
+  }
+
+  @media android {
+    --font-sans: Manrope_400Regular;
+  }
+}
+
+/*
+ * On React Native, font-bold only sets fontWeight (often ignored for custom fonts).
+ * Map weight utilities to loaded Manrope files (default UI).
+ */
+@utility font-medium {
+  font-family: Manrope_500Medium;
+  font-weight: normal;
+}
+
+@utility font-semibold {
+  font-family: Manrope_600SemiBold;
+  font-weight: normal;
+}
+
+@utility font-bold {
+  font-family: Manrope_700Bold;
+  font-weight: normal;
+}
+
+@utility font-extrabold {
+  font-family: Manrope_800ExtraBold;
+  font-weight: normal;
+}
+
+@utility font-black {
+  font-family: Manrope_800ExtraBold;
+  font-weight: normal;
+}
+
+/* Explicit Plus Jakarta Sans utilities for headings / display */
+@utility font-jakarta {
+  font-family: PlusJakartaSans_400Regular;
+  font-weight: normal;
+}
+
+@utility font-jakarta-medium {
+  font-family: PlusJakartaSans_500Medium;
+  font-weight: normal;
+}
+
+@utility font-jakarta-semibold {
+  font-family: PlusJakartaSans_600SemiBold;
+  font-weight: normal;
+}
+
+@utility font-jakarta-bold {
+  font-family: PlusJakartaSans_700Bold;
+  font-weight: normal;
+}
+
+@utility font-display {
+  font-family: PlusJakartaSans_700Bold;
+  font-weight: normal;
+}
