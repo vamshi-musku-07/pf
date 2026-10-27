@@ -29,6 +29,7 @@ import {
 } from "@/components/auth/AuthScreenLayout";
 import { useBackendAuth } from "@/context/BackendAuthContext";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { useAppleAuth } from "@/hooks/useAppleAuth";
 import {
   getAuthRedirectParams,
   parseRedirectParam,
@@ -45,6 +46,7 @@ export default function AuthCredentialsForm({ initialMode = "signIn" }) {
   const params = useLocalSearchParams();
   const {
     signInWithGoogle,
+    signInWithApple,
     signInWithEmail,
     register,
     verifyOTP,
@@ -59,6 +61,7 @@ export default function AuthCredentialsForm({ initialMode = "signIn" }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const cooldownTimerRef = useRef(null);
@@ -69,6 +72,7 @@ export default function AuthCredentialsForm({ initialMode = "signIn" }) {
   const sheetLift = useRef(new Animated.Value(0)).current;
 
   const { signIn, isAvailable: googleSignInAvailable } = useGoogleAuth();
+  const { signIn: signInWithAppleNative, isAvailable: appleAvailable } = useAppleAuth();
   const authRedirectParams = getAuthRedirectParams(params.redirect);
   const redirectTarget = useMemo(
     () => parseRedirectParam(params.redirect),
@@ -135,6 +139,26 @@ export default function AuthCredentialsForm({ initialMode = "signIn" }) {
       setGoogleLoading(false);
     }
   }, [mode, navigateAfterAuth, signIn, signInWithGoogle]);
+
+  const handleApple = useCallback(async () => {
+    setError("");
+    setAppleLoading(true);
+    try {
+      const result = await signInWithAppleNative();
+      if (!result) return;
+      await signInWithApple(result);
+      navigateAfterAuth();
+    } catch (err) {
+      const data = err?.response?.data;
+      const msg =
+        data?.message ||
+        err?.message ||
+        (mode === "signUp" ? "Apple sign up failed. Try again." : "Apple sign in failed. Try again.");
+      setError(msg);
+    } finally {
+      setAppleLoading(false);
+    }
+  }, [mode, navigateAfterAuth, signInWithApple, signInWithAppleNative]);
 
   const handleSignIn = async () => {
     setError("");
@@ -473,6 +497,9 @@ export default function AuthCredentialsForm({ initialMode = "signIn" }) {
               onGoogle={handleGoogle}
               googleLoading={googleLoading}
               googleAvailable={googleSignInAvailable}
+              onApple={handleApple}
+              appleLoading={appleLoading}
+              appleAvailable={appleAvailable}
               onComingSoon={onComingSoon}
             />
           </View>

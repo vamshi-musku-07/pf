@@ -3,15 +3,15 @@
     "name": "PlayFlash",
     "slug": "playflash",
     "owner": "eagleiitech",
-    "version": "1.0.1",
-    "runtimeVersion": "1.0.1",
+    "version": "1.0.2",
+    "runtimeVersion": "1.0.2",
     "orientation": "default",
     "icon": "./assets/logos/app_logo.png",
     "scheme": "playflash",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
@@ -79,7 +79,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.eagleiitech.playflash",
+      "usesAppleSignIn": true,
       "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
         "NSCameraUsageDescription": "PlayFlash needs camera access to scan QR codes and take photos.",
         "NSPhotoLibraryUsageDescription": "PlayFlash needs access to your photos to add player images.",
         "NSLocationWhenInUseUsageDescription": "PlayFlash uses your location to show nearby events.",
@@ -95,6 +97,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-apple-authentication",
       "expo-updates",
       "expo-screen-orientation",
       [
@@ -153,7 +156,7 @@
       [
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "com.googleusercontent.apps.937573920313-i8po5nt37e69lf6ojctp1ovd4ar8m60h"
+          "iosUrlScheme": "com.googleusercontent.apps.937573920313-pi7rjhr9meqpnr2ehi14jdj4ksamgeh3"
         }
       ],
       "./plugins/withIosModularHeaders"

@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { Platform } from "react-native";
 import {
   ensureGoogleSignInConfigured,
   getGoogleSignIn,
@@ -31,7 +32,9 @@ export function useGoogleAuth() {
       getGoogleSignIn();
 
     try {
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      if (Platform.OS === "android") {
+        await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      }
 
       // Always clear cached account so user can pick Google account after logout
       await prepareGoogleAccountPicker();

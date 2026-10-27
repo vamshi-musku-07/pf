@@ -1,2 +1,43 @@
-# EAS Build archive rules live at the monorepo git root: ../../.easignore (C:\pff\.easignore)
-# This file is only used when EAS_NO_VCS=1 is set. See root .easignore for cloud builds.
+# This app folder is its own git root, so EAS reads THIS file and ignores .gitignore.
+# Keep generated and local-only folders out of the upload. EAS installs
+# dependencies and runs prebuild on its own.
+
+# Local native projects (regenerated on the build server)
+android/
+ios/
+
+# Dependencies and caches
+.expo/
+.expo-bundle-check/
+dist/
+dist-web-test/
+dist-test-bundle/
+web-build/
+
+# Dev-only
+__tests__/
+.vscode/
+.claude/
+jest.config.js
+jest.setup.js
+**/*.test.js
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.js
+
+# Secrets (EAS production env is injected separately)
+.env
+.env.*
+!.env.example
+
+# Local archives and unused video
+*.zip
+assets/videos/hero_original.mp4
+
+# OS / logs
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+**/npm-debug.*
+**/yarn-debug.*
+**/yarn-error.*

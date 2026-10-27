@@ -10,6 +10,12 @@ export const googleLoginAPI = (idToken) => {
     .then((response) => response.data);
 };
 
+export const appleLoginAPI = ({ identityToken, nonce, fullName }) => {
+  return authApi
+    .post("/apple", { identityToken, nonce, fullName }, { isPublic: true })
+    .then((response) => response.data);
+};
+
 export const loginAPI = (email, password) => {
   return authApi
     .post("/login", { email, password }, { isPublic: true })

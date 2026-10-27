@@ -491,17 +491,29 @@ function AuthSocialButton({
   );
 }
 
-export function AuthSocialRow({ onGoogle, googleLoading, googleAvailable, onComingSoon }) {
+export function AuthSocialRow({
+  onGoogle,
+  googleLoading,
+  googleAvailable,
+  onApple,
+  appleLoading,
+  appleAvailable,
+  onComingSoon,
+}) {
   return (
     <View style={{ flexDirection: "row", justifyContent: "center", gap: 16 }}>
+      {appleAvailable ? (
       <AuthSocialButton
         accessibilityLabel="Continue with Apple"
-        onPress={() => onComingSoon?.("Apple")}
+        onPress={onApple}
+        loading={appleLoading}
+        disabled={appleLoading}
         icon={<Ionicons name="logo-apple" size={25} color="#FFFFFF" />}
         backgroundColor="#111111"
         textColor="#FFFFFF"
         compact
       />
+      ) : null}
       <AuthSocialButton
         accessibilityLabel="Continue with Google"
         onPress={googleAvailable ? onGoogle : () => onComingSoon?.("Google")}

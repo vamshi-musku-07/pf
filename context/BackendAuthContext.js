@@ -27,6 +27,7 @@ import {
 import {
   forgotPasswordAPI,
   googleLoginAPI,
+  appleLoginAPI,
   loginAPI,
   logoutAPI,
   deleteAccountAPI,
@@ -301,6 +302,15 @@ export const BackendAuthProvider = ({ children }) => {
     [handleAuthResponse],
   );
 
+  const signInWithApple = useCallback(
+    async (credential) => {
+      const result = await appleLoginAPI(credential);
+      await handleAuthResponse(result);
+      return result;
+    },
+    [handleAuthResponse],
+  );
+
   const signInWithEmail = useCallback(
     async (email, password) => {
       const result = await loginAPI(email, password);
@@ -395,6 +405,7 @@ export const BackendAuthProvider = ({ children }) => {
     resetPassword,
     signInWithEmail,
     signInWithGoogle,
+    signInWithApple,
     signOut,
     deleteAccount,
     updateBackendUser,

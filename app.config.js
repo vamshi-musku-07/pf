@@ -31,6 +31,7 @@ const REQUIRED_API_ENV_KEYS = [
 const REQUIRED_GOOGLE_ENV_KEYS = [
   "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID",
   "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID",
+  "EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID",
 ];
 
 module.exports = () => {
@@ -81,8 +82,12 @@ module.exports = () => {
   }
 
   const webClientId = String(process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || "").trim();
-  const iosUrlScheme = webClientId
-    ? `com.googleusercontent.apps.${webClientId.replace(/\.apps\.googleusercontent\.com$/i, "")}`
+  const iosClientId = String(process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || "").trim();
+  // iOS must register the reversed *iOS* OAuth client, not the web client.
+  // Using the web client here is why Google login returned to the app as a failure.
+  const schemeSource = iosClientId || webClientId;
+  const iosUrlScheme = schemeSource
+    ? `com.googleusercontent.apps.${schemeSource.replace(/\.apps\.googleusercontent\.com$/i, "")}`
     : null;
 
   if (iosUrlScheme) {
