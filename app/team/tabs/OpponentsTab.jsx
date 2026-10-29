@@ -9,6 +9,7 @@ import LottieView from "lottie-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Image as ExpoImage } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import { io } from "socket.io-client";
 import { createTeamAPI, getTeamByIdAPI, getTeamsAPI, addOpponentsAPI, deleteOpponentAPI, getOpponentsAPI } from "@/services/TeamApi";
 import { getPlayersByTeamAPI } from "@/services/PlayerApi";
@@ -352,8 +353,8 @@ export default function OpponentsTab({ team, teamId, onRefresh, refreshing, pull
   };
 
   const pickOpponentLogo = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
+    const allowed = await ensurePhotoLibraryAccess();
+    if (!allowed) {
       Alert.alert("Permission needed", "Please allow access to your photos.");
       return;
     }

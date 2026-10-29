@@ -28,6 +28,7 @@ import { BACK_TO_PROFILE } from "@/lib/navigationBack";
 import { useBackendAuth } from "@/context/BackendAuthContext";
 import { useRefresh } from "@/hooks/useRefresh";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import { Asset } from "expo-asset";
 import * as FileSystem from "expo-file-system/legacy";
 import {
@@ -631,8 +632,8 @@ const Profile = () => {
   // Pick from device gallery
   const handlePickFromDevice = async () => {
     setShowAvatarPicker(false);
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
+    const allowed = await ensurePhotoLibraryAccess();
+    if (!allowed) {
       Alert.alert(
         "Permission needed",
         "Please allow access to your photo library.",

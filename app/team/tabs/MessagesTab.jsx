@@ -7,6 +7,7 @@ import useKeyboardInset from "@/hooks/useKeyboardInset";
 import { Image as ExpoImage } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import { AudioModule, useAudioRecorder, RecordingPresets } from "expo-audio";
 import * as FileSystem from "expo-file-system/legacy";
 import { io } from "socket.io-client";
@@ -486,8 +487,8 @@ export default function MessagesTab({ teamId, opponentTeamId = null, isSelfOwned
 
   // --- Image / Video picker ---
   const pickMedia = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
+    const allowed = await ensurePhotoLibraryAccess();
+    if (!allowed) {
       Alert.alert(
         "Permission needed",
         "Please allow access to your media library.",

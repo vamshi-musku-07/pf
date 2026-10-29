@@ -441,6 +441,7 @@ function AuthSocialButton({
   borderColor,
   shadow,
   compact = false,
+  fullWidth = false,
 }) {
   return (
     <TouchableOpacity
@@ -450,7 +451,7 @@ function AuthSocialButton({
       activeOpacity={0.88}
       disabled={disabled || loading}
       style={{
-        ...(compact ? { width: 54 } : { flex: 1 }),
+        ...(compact ? { width: 54 } : fullWidth ? { width: "100%", alignSelf: "stretch" } : { flex: 1 }),
         height: 54,
         borderRadius: 27,
         backgroundColor,
@@ -500,6 +501,24 @@ export function AuthSocialRow({
   appleAvailable,
   onComingSoon,
 }) {
+  if (Platform.OS === "android") {
+    return (
+      <AuthSocialButton
+        label="Continue with Google"
+        accessibilityLabel="Continue with Google"
+        onPress={googleAvailable ? onGoogle : () => onComingSoon?.("Google")}
+        loading={googleLoading}
+        disabled={googleLoading}
+        icon={<GoogleMark size={20} />}
+        backgroundColor="#FFFFFF"
+        textColor="#1F2937"
+        borderColor="#E5E7EB"
+        shadow
+        fullWidth
+      />
+    );
+  }
+
   return (
     <View style={{ flexDirection: "row", justifyContent: "center", gap: 16 }}>
       {appleAvailable ? (

@@ -20,6 +20,7 @@ import useKeyboardInset from "@/hooks/useKeyboardInset";
 import { useBackendAuth } from "@/context/BackendAuthContext";
 import { goBackTo, getBackToParam, BACK_TO_PROFILE } from "@/lib/navigationBack";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import { useAppearance } from "@/context/AppearanceContext";
 import { getAppTheme } from "@/constants/appearanceTheme";
 import {
@@ -585,8 +586,8 @@ const CustomerSupport = () => {
 
   // ── Pick image ──────────────────────────────────────────────────────────────
   const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
+    const allowed = await ensurePhotoLibraryAccess();
+    if (!allowed) {
       Alert.alert("Permission needed", "Please allow access to your photo library.");
       return;
     }

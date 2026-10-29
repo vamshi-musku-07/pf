@@ -22,6 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import { useBackendAuth } from "@/context/BackendAuthContext";
 import { showToast } from "@/context/ToastContext";
 import { goBackTo, BACK_TO_HOME } from "@/lib/navigationBack";
@@ -1274,8 +1275,8 @@ export default function PostsScreen() {
 
   const pickEditMedia = async () => {
     try {
-      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!perm.granted) {
+      const allowed = await ensurePhotoLibraryAccess();
+      if (!allowed) {
         showToast("Allow photo library access to attach media", "warning");
         return;
       }

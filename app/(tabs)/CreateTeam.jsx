@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import { Image as ExpoImage } from "expo-image";
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from "react-native-svg";
 import {
@@ -240,8 +241,8 @@ const CreateTeam = () => {
   };
 
   const pickCustomTeamLogo = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
+    const allowed = await ensurePhotoLibraryAccess();
+    if (!allowed) {
       Alert.alert("Permission needed", "Please allow access to your photos.");
       return;
     }

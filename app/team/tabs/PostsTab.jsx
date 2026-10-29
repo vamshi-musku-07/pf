@@ -7,6 +7,7 @@ import BottomSheet, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import * as Haptics from "expo-haptics";
 import { useVideoPlayer, VideoView } from "expo-video";
 import * as ScreenOrientation from "expo-screen-orientation";
@@ -530,8 +531,8 @@ export default function PostsTab({
 
   const pickMedia = async () => {
     try {
-      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!perm.granted) {
+      const allowed = await ensurePhotoLibraryAccess();
+      if (!allowed) {
         Alert.alert(
           "Permission required",
           "Please allow media library access to upload.",

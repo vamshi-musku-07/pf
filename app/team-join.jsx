@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { logoRequireMap } from "@/app/team/tabs/helpers";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import {
   ActivityIndicator,
   Alert,
@@ -74,8 +75,8 @@ export default function TeamJoin() {
   };
 
   const pickProfileImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
+    const allowed = await ensurePhotoLibraryAccess();
+    if (!allowed) {
       Alert.alert("Permission needed", "Please allow photo library access.");
       return;
     }

@@ -10,6 +10,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import { io } from "socket.io-client";
 import QRCode from "react-native-qrcode-svg";
 import { getTeamByIdAPI } from "@/services/TeamApi";
@@ -203,8 +204,8 @@ export default function TeamTab({
   };
 
   const pickPlayerImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
+    const allowed = await ensurePhotoLibraryAccess();
+    if (!allowed) {
       Alert.alert("Permission needed", "Please allow access to your photos.");
       return;
     }

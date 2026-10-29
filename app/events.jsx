@@ -61,6 +61,7 @@ import { getAppTheme } from "@/constants/appearanceTheme";
 import { createEventShareLink, extractEventShareId, shareEventInvite } from "@/lib/shareLinks";
 import { clearUpcomingCache } from "@/lib/homeUpcomingCache";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import * as FileSystem from "expo-file-system/legacy";
 import * as Notifications from "expo-notifications";
 import { scanReceiptAPI } from "@/services/TriCountApi";
@@ -2208,8 +2209,7 @@ export default function EventsPage() {
 
   // ── Photo upload ──
   const handleAddPhoto = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") return Alert.alert("Permission needed", "Please allow photo access.");
+    if (!(await ensurePhotoLibraryAccess())) return Alert.alert("Permission needed", "Please allow photo access.");
     const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: "images", allowsEditing: true, quality: 0.8 });
     if (result.canceled || !result.assets?.length) return;
     setUploadingPhoto(true);
@@ -2277,8 +2277,7 @@ export default function EventsPage() {
   };
 
   const handlePickRecapCover = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") return;
+    if (!(await ensurePhotoLibraryAccess())) return;
     const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: "images", allowsEditing: true, quality: 0.8 });
     if (result.canceled || !result.assets?.length) return;
     const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, { encoding: FileSystem.EncodingType.Base64 });
@@ -2332,8 +2331,7 @@ export default function EventsPage() {
   }, [eventScanned, joiningEvent]);
 
   const handleUploadEventQR = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") return Alert.alert("Permission needed", "Please allow photo access.");
+    if (!(await ensurePhotoLibraryAccess())) return Alert.alert("Permission needed", "Please allow photo access.");
     const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: "images", allowsEditing: false, quality: 0.9 });
     if (result.canceled || !result.assets?.length) return;
     setJoiningEvent(true);

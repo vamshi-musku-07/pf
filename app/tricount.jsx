@@ -27,6 +27,7 @@ import {
 import { showLocalNotification } from "@/services/PushNotificationService";
 import * as SystemUI from "expo-system-ui";
 import * as ImagePicker from "expo-image-picker";
+import { ensurePhotoLibraryAccess } from "@/lib/photoLibraryAccess";
 import * as FileSystem from "expo-file-system/legacy";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -512,8 +513,7 @@ function ReceiptImages({ exp, groupId, currentUserId, isCreator, onUpdate, idToN
   const images = exp.receiptImages || [];
 
   const handleUpload = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") return Alert.alert("Permission needed", "Please allow photo access.");
+    if (!(await ensurePhotoLibraryAccess())) return Alert.alert("Permission needed", "Please allow photo access.");
     const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: "images", allowsEditing: false, quality: 0.8 });
     if (result.canceled || !result.assets?.length) return;
     setUploading(true);
@@ -789,8 +789,7 @@ function GroupDetail({ group: initialGroup, onBack, currentUsername, backendUser
       {
         text: "Upload from Gallery",
         onPress: async () => {
-          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-          if (status !== "granted") return Alert.alert("Permission needed", "Please allow access to your photos.");
+          if (!(await ensurePhotoLibraryAccess())) return Alert.alert("Permission needed", "Please allow access to your photos.");
           const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: "images", allowsEditing: false, quality: 0.7 });
           if (!result.canceled && result.assets?.length) await _processReceiptImage(result.assets[0]);
         },
@@ -2655,8 +2654,7 @@ export default function TricountPage() {
   }, [joinGroup, joining, scanned]);
 
   const handleUploadQR = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") return Alert.alert("Permission needed", "Please allow photo access.");
+    if (!(await ensurePhotoLibraryAccess())) return Alert.alert("Permission needed", "Please allow photo access.");
     const result = await ImagePicker.launchImageLibraryAsync({ mediaTypes: "images", allowsEditing: false, quality: 0.9 });
     if (result.canceled || !result.assets?.length) return;
     setJoining(true);
